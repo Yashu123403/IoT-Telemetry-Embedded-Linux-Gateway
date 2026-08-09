@@ -1,0 +1,74 @@
+# ---------------------------------------------------------------------------
+# Embedded Linux gateway configuration
+# ---------------------------------------------------------------------------
+# Models the software configuration of a resource-constrained ARM-class
+# embedded Linux gateway (e.g. TI Sitara-class processor, as in Mistral's
+# Modular Industrial Gateway case study) that ingests MQTT telemetry from a
+# sensor fleet, buffers it under memory constraints, applies rules,
+# aggregates it, and persists it locally with retention/rotation.
+# ---------------------------------------------------------------------------
+
+gateway:
+  gateway_id: "gw-edge-01"
+  mqtt_broker:
+    host: "127.0.0.1"
+    port: 1883
+    keepalive: 30
+  subscribe_topic: "telemetry/+/+"     # telemetry/<device_id>/<metric_type>
+
+  resource_limits:
+    ram_ceiling_mb: 256          # simulated embedded-Linux memory budget
+    buffer_max_messages: 500     # bounded ingestion buffer (ring buffer)
+    buffer_overflow_policy: "drop_oldest"   # or "drop_newest"
+
+  device_management:
+    heartbeat_timeout_sec: 12.0   # mark device OFFLINE if no message within this window
+    offline_check_interval_sec: 3.0
+
+  aggregation:
+    window_sec: 30.0              # rolling aggregation window per device/metric
+
+  storage:
+    sqlite_path: "data/telemetry.db"
+    retention_hours: 24
+    rotation_check_interval_sec: 60
+
+  rules:
+    - name: "high_temperature"
+      metric_type: "temperature"
+      condition: "gt"
+      threshold: 45.0
+      severity: "critical"
+      message: "Temperature exceeds safe operating threshold"
+
+    - name: "low_temperature"
+      metric_type: "temperature"
+      condition: "lt"
+      threshold: -5.0
+      severity: "warning"
+      message: "Temperature below expected operating range"
+
+    - name: "high_humidity"
+      metric_type: "humidity"
+      condition: "gt"
+      threshold: 85.0
+      severity: "warning"
+      message: "Humidity exceeds safe storage threshold"
+
+    - name: "excessive_vibration"
+      metric_type: "vibration"
+      condition: "gt"
+      threshold: 7.0
+      severity: "critical"
+      message: "Vibration exceeds bearing-wear threshold"
+
+    - name: "overcurrent"
+      metric_type: "current"
+      condition: "gt"
+      threshold: 30.0
+      severity: "critical"
+      message: "Current draw exceeds rated motor limit"
+
+  rest_api:
+    host: "127.0.0.1"
+    port: 8080

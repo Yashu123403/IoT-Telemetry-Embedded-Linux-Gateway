@@ -1,0 +1,117 @@
+# ---------------------------------------------------------------------------
+# Simulated IoT sensor fleet
+# ---------------------------------------------------------------------------
+# Each entry describes one simulated field device publishing telemetry over
+# MQTT to the gateway. No physical sensors/ESP32/RPi are involved -- these
+# are Python processes/threads generating physically-plausible synthetic
+# readings (with noise, drift and occasional faults), matching the kind of
+# device fleet an Industrial IoT Gateway (e.g. Mistral's Modular Industrial
+# Gateway case study) would ingest from Modbus/serial field sensors.
+# ---------------------------------------------------------------------------
+
+mqtt_broker:
+  host: "127.0.0.1"
+  port: 1883
+  keepalive: 30
+
+devices:
+
+  - device_id: "temp-sensor-01"
+    type: "temperature"
+    site: "warehouse-a"
+    publish_interval_sec: 2.0
+    firmware_version: "1.4.2"
+    params:
+      mean_c: 24.0
+      noise_std_c: 0.6
+      drift_per_min_c: 0.02
+      min_c: -10.0
+      max_c: 85.0
+    fault_profile:
+      dropout_probability: 0.02
+      spike_probability: 0.01
+      spike_magnitude_c: 15.0
+      stuck_probability: 0.005
+
+  - device_id: "temp-sensor-02"
+    type: "temperature"
+    site: "warehouse-b"
+    publish_interval_sec: 2.5
+    firmware_version: "1.4.2"
+    params:
+      mean_c: 21.5
+      noise_std_c: 0.5
+      drift_per_min_c: 0.015
+      min_c: -10.0
+      max_c: 85.0
+    fault_profile:
+      dropout_probability: 0.03
+      spike_probability: 0.01
+      spike_magnitude_c: 12.0
+      stuck_probability: 0.005
+
+  - device_id: "humidity-sensor-01"
+    type: "humidity"
+    site: "warehouse-a"
+    publish_interval_sec: 3.0
+    firmware_version: "2.1.0"
+    params:
+      mean_pct: 55.0
+      noise_std_pct: 2.5
+      drift_per_min_pct: 0.05
+      min_pct: 0.0
+      max_pct: 100.0
+    fault_profile:
+      dropout_probability: 0.02
+      spike_probability: 0.008
+      spike_magnitude_pct: 20.0
+      stuck_probability: 0.004
+
+  - device_id: "vibration-sensor-01"
+    type: "vibration"
+    site: "motor-bay-1"
+    publish_interval_sec: 1.0
+    firmware_version: "0.9.7"
+    params:
+      mean_mm_s: 1.2
+      noise_std_mm_s: 0.3
+      drift_per_min_mm_s: 0.01
+      min_mm_s: 0.0
+      max_mm_s: 50.0
+    fault_profile:
+      dropout_probability: 0.015
+      spike_probability: 0.02        # bearing-wear-style spikes
+      spike_magnitude_mm_s: 8.0
+      stuck_probability: 0.003
+
+  - device_id: "current-sensor-01"
+    type: "current"
+    site: "motor-bay-1"
+    publish_interval_sec: 1.5
+    firmware_version: "1.0.3"
+    params:
+      mean_a: 12.5
+      noise_std_a: 0.4
+      drift_per_min_a: 0.0
+      min_a: 0.0
+      max_a: 40.0
+    fault_profile:
+      dropout_probability: 0.02
+      spike_probability: 0.01
+      spike_magnitude_a: 10.0
+      stuck_probability: 0.004
+
+  - device_id: "gps-tracker-01"
+    type: "gps"
+    site: "fleet-vehicle-7"
+    publish_interval_sec: 5.0
+    firmware_version: "3.2.1"
+    params:
+      start_lat: 12.9716
+      start_lon: 77.5946
+      speed_kmh: 35.0
+      heading_deg: 90.0
+    fault_profile:
+      dropout_probability: 0.05      # GPS is the most connectivity-sensitive
+      spike_probability: 0.0
+      stuck_probability: 0.01
