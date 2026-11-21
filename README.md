@@ -1,11 +1,24 @@
 # IoT Sensor Telemetry + Embedded Linux Gateway Simulation
 [![IoT Gateway CI](https://github.com/Yashu123403/IoT-Telemetry-Embedded-Linux-Gateway/actions/workflows/ci.yml/badge.svg)](https://github.com/Yashu123403/IoT-Telemetry-Embedded-Linux-Gateway/actions/workflows/ci.yml)
-
 A software-only, laptop-runnable project that simulates a fleet of
 industrial IoT sensors publishing telemetry over **real MQTT** to a
 gateway process modeled on **embedded Linux gateway** software
 architecture (Modbus/serial field sensors → embedded ARM Linux gateway
 → cloud/web monitoring).
+
+**Live Dashboard:** https://iot-telemetry-embedded-linux-gateway.onrender.com
+
+The IoT Telemetry Gateway is deployed on Render. The hosted dashboard provides real-time visibility into simulated IoT devices, telemetry messages, gateway health, and alerts.
+
+**Deployment highlights:**
+- Dockerized Python application.
+- Hosted using Render Web Services.
+- Flask-based monitoring dashboard.
+- Six simulated IoT devices publishing telemetry.
+- Live device status, message processing metrics, and alerts.
+
+**Note:** This project is a software-based IoT gateway simulation. It does not use physical sensors or embedded hardware. The free Render instance may spin down after inactivity, so the first dashboard request may take some time to load.
+
 
 > **No physical hardware required or claimed.** No ESP32, no Raspberry
 > Pi, no real sensors. Sensor devices are simulated as Python threads
