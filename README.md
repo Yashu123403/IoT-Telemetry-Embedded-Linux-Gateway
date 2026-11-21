@@ -1,4 +1,5 @@
 # IoT Sensor Telemetry + Embedded Linux Gateway Simulation
+[![IoT Gateway CI](https://github.com/Yashu123403/IoT-Telemetry-Embedded-Linux-Gateway/actions/workflows/ci.yml/badge.svg)](https://github.com/Yashu123403/IoT-Telemetry-Embedded-Linux-Gateway/actions/workflows/ci.yml)
 
 A software-only, laptop-runnable project that simulates a fleet of
 industrial IoT sensors publishing telemetry over **real MQTT** to a
@@ -129,6 +130,59 @@ behavior), SQLite storage, pydantic schema validation, MQTT topic
 matching, and **two full integration tests** that start the real
 embedded broker, run a real sensor node over real MQTT, and verify the
 gateway processes/aggregates/alerts/persists/marks-offline correctly.
+
+
+## Docker Setup
+
+The gateway can also be built and run inside a Docker container.
+
+### Build the Docker image
+
+```bash
+docker build -t iot-telemetry-gateway .
+```
+### Run the container (Windows PowerShell)
+```bash
+docker run -d --name iot-gateway -p 8080:8080 -v "${PWD}\data:/app/data" iot-telemetry-gateway
+```
+
+### Access the dashboard
+
+Open your browser:
+
+http://localhost:8080
+
+### Stop the container
+
+```bash
+docker stop iot-gateway
+```
+
+### Remove the container
+
+```bash
+docker rm iot-gateway
+```
+
+## Continuous Integration
+
+This project uses GitHub Actions for automated testing.
+
+- Triggered on pushes and pull requests to `main`.
+- Uses Ubuntu and Python 3.12.
+- Installs project dependencies from `requirements.txt`.
+- Runs the complete test suite using `pytest`.
+
+**Latest CI result:** 51 tests passed.
+
+## Project Implementation Notes
+
+- Sensor readings are generated through Python-based simulations.
+- MQTT communication uses real broker and client connections.
+- Docker packages the gateway application and its dependencies.
+- GitHub Actions automates test execution.
+- No physical sensors or embedded Linux hardware are used in this implementation.
+
 
 AUTHOR 
 YASHU A B
