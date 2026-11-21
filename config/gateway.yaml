@@ -1,3 +1,4 @@
+
 # ---------------------------------------------------------------------------
 # Embedded Linux gateway configuration
 # ---------------------------------------------------------------------------
@@ -10,23 +11,25 @@
 
 gateway:
   gateway_id: "gw-edge-01"
+
   mqtt_broker:
     host: "127.0.0.1"
     port: 1883
     keepalive: 30
+
   subscribe_topic: "telemetry/+/+"     # telemetry/<device_id>/<metric_type>
 
   resource_limits:
-    ram_ceiling_mb: 256          # simulated embedded-Linux memory budget
-    buffer_max_messages: 500     # bounded ingestion buffer (ring buffer)
+    ram_ceiling_mb: 256
+    buffer_max_messages: 500
     buffer_overflow_policy: "drop_oldest"   # or "drop_newest"
 
   device_management:
-    heartbeat_timeout_sec: 12.0   # mark device OFFLINE if no message within this window
+    heartbeat_timeout_sec: 12.0
     offline_check_interval_sec: 3.0
 
   aggregation:
-    window_sec: 30.0              # rolling aggregation window per device/metric
+    window_sec: 30.0
 
   storage:
     sqlite_path: "data/telemetry.db"
@@ -70,5 +73,5 @@ gateway:
       message: "Current draw exceeds rated motor limit"
 
   rest_api:
-    host: "127.0.0.1"
+    host: "0.0.0.0"
     port: 8080
